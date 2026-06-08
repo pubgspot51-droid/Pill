@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Care Package for Khushi 📦</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fdf5e6; /* Soft warm background */
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #ff8c00;
+            font-size: 26px;
+            margin-bottom: 5px;
+            transition: opacity 0.5s;
+        }
+
+        p.subtitle {
+            color: #d2691e;
+            font-size: 16px;
+            margin-bottom: 30px;
+            transition: opacity 0.5s;
+        }
+
+        /* The Box */
+        .box {
+            font-size: 100px;
+            cursor: pointer;
+            animation: jiggle 1.5s infinite;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .box:active {
+            transform: scale(0.9);
+        }
+
+        @keyframes jiggle {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* The Items */
+        .items-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: -20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .item {
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid #ffe4b5;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .item-icon {
+            font-size: 40px;
+        }
+
+        .item-text {
+            color: #8b4513;
+            font-size: 18px;
+            font-weight: 800;
+            text-align: left;
+        }
+
+        /* Final Message Card */
+        .message-card {
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border: 3px solid #ffb6c1;
+            margin-top: 20px;
+            display: none; /* Blocked until revealed */
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .message-card p {
+            color: #c71585;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            font-size: 20px;
+            animation: fall 3s linear forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-container">
+        <h1 id="title">A Care Package for You!</h1>
+        <p class="subtitle" id="subtitle">Tap the box to open it 🥺</p>
+        
+        <div class="box" id="the-box" onclick="openPackage()">📦</div>
+
+        <div class="items-container" id="items">
+            <div class="item" id="item-1">
+                <div class="item-icon">🍲</div>
+                <div class="item-text">Warm Soup for the Fever</div>
+            </div>
+            <div class="item" id="item-2">
+                <div class="item-icon">💊</div>
+                <div class="item-text">Daksh's "Sorry for being an Idiot" Pill</div>
+            </div>
+            <div class="message-card" id="final-message">
+                <p><strong>Bhai...</strong><br>I know you are sick, aur main usse bhi bada beemar hoon jo aisi halat mein tumse jhagda kar liya. My brain stopped working.<br><br>I am really, really sorry. Please jaldi theek ho jaao. ♥️</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isOpened = false;
+
+        function openPackage() {
+            if (isOpened) return;
+            isOpened = true;
+
+            const box = document.getElementById('the-box');
+            const title = document.getElementById('title');
+            const subtitle = document.getElementById('subtitle');
+            
+            // Stop box jiggle and fade out text/box
+            box.style.animation = 'none';
+            box.style.transform = 'scale(0)';
+            box.style.opacity = '0';
+            title.style.opacity = '0';
+            subtitle.style.opacity = '0';
+
+            // Show items sequentially
+            setTimeout(() => { showItem('item-1'); }, 400);
+            setTimeout(() => { showItem('item-2'); }, 1200);
+            setTimeout(() => { showFinalMessage(); }, 2500);
+        }
+
+        function showItem(id) {
+            const item = document.getElementById(id);
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0) scale(1)';
+            
+            if(navigator.vibrate) navigator.vibrate(50);
+        }
+
+        function showFinalMessage() {
+            const msg = document.getElementById('final-message');
+            msg.style.display = 'block';
+            
+            // Small delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                msg.style.opacity = '1';
+                msg.style.transform = 'translateY(0) scale(1)';
+                createHearts();
+                if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            }, 50);
+        }
+
+        function createHearts() {
+            const emojis = ['💖', '✨', '🩹', '🌸'];
+            for (let i = 0; i < 30; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'confetti';
+                heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '-20px';
+                
+                let duration = Math.random() * 2 + 2;
+                heart.style.animationDuration = duration + 's';
+                
+                document.body.appendChild(heart);
+
+                setTimeout(() => { heart.remove(); }, duration * 1000);
+            }
+        }
+    </script>
+</body>
+</html>
